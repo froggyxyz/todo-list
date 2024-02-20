@@ -1,8 +1,8 @@
 import { defineRule } from 'vee-validate';
 
-defineRule('required', (value) => {
+defineRule('required', (value: any) => {
     if (!value || !value.length) {
-        return 'This field is required';
+        return 'Поле обязательно к заполнению';
     }
     return true;
 });

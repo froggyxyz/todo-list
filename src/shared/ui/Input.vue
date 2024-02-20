@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { NFormItem, NInput } from 'naive-ui';
 import { useField } from 'vee-validate';
-import { toRef, watch } from 'vue';
+import { toRef } from 'vue';
 
 const props = defineProps<{
     name: string;
@@ -9,17 +9,11 @@ const props = defineProps<{
     placeholder: string;
 }>();
 
-const emit = defineEmits<{ update: [value: string] }>();
-
 const { value, errorMessage } = useField<string>(toRef(props, 'name'), undefined);
-
-watch(value, () => {
-    emit('update', value.value);
-});
 </script>
 
 <template>
-    <NFormItem :label>
+    <NFormItem :label :validation-status="errorMessage ? 'error' : 'success'">
         <NInput v-model:value="value" :placeholder />
         <template #feedback>
             {{ errorMessage }}

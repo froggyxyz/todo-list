@@ -1,15 +1,10 @@
 <script lang="ts" setup>
-import { useTasksStore } from '@/shared/stores';
-import { computed, onMounted, reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import TaskCard from '@/shared/ui/TaskCard.vue';
 import { NPagination } from 'naive-ui';
-import { storeToRefs } from 'pinia';
+import type { ITask } from '@/shared/api/models';
 
-const props = defineProps<{ completed?: boolean }>();
-
-const store = useTasksStore();
-const { getTasks, getCompletedTasks } = storeToRefs(store);
-const { fetchTasks } = store;
+const props = defineProps<{ tasks: ITask[] }>();
 
 const pagination = reactive({
     page: 1,
@@ -19,14 +14,8 @@ const pagination = reactive({
 const handleChangePage = (page: number) => (pagination.page = page);
 
 const paginatedTasks = computed(() =>
-    props.completed
-        ? getCompletedTasks.value.slice((pagination.page - 1) * pagination.pageSize, pagination.page * pagination.pageSize)
-        : getTasks.value.slice((pagination.page - 1) * pagination.pageSize, pagination.page * pagination.pageSize),
+    props.tasks.slice((pagination.page - 1) * pagination.pageSize, pagination.page * pagination.pageSize),
 );
-
-onMounted(() => {
-    if (!getTasks.value.length) fetchTasks();
-});
 </script>
 
 <template>
@@ -34,12 +23,7 @@ onMounted(() => {
         <div class="tasks__list">
             <TaskCard v-for="{ id, title, completed } in paginatedTasks" :key="id" :id :title :completed />
         </div>
-        <NPagination
-            :item-count="completed ? getCompletedTasks.length : getTasks.length"
-            :page="pagination.page"
-            :page-size="pagination.pageSize"
-            @update:page="handleChangePage"
-        />
+        <NPagination :item-count="tasks.length" :page="pagination.page" :page-size="pagination.pageSize" @update:page="handleChangePage" />
     </div>
 </template>
 

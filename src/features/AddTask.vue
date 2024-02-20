@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { NButton, NCard, NModal } from 'naive-ui';
-import Input from '@/shared/ui/Input.vue';
+import { NButton, NModal } from 'naive-ui';
 import { ref } from 'vue';
 import { Add16Filled } from '@vicons/fluent';
 import { Icon } from '@vicons/utils';
+import AddTaskForm from '@/widgets/AddTaskForm.vue';
 
 const showModal = ref<boolean>(false);
 const toggleShowModal = () => (showModal.value = !showModal.value);
@@ -17,10 +17,6 @@ const toggleShowModal = () => (showModal.value = !showModal.value);
         Создать задачу
     </NButton>
     <NModal v-model:show="showModal">
-        <NCard title="Создание задачи" style="max-width: 600px">
-            <form>
-                <Input name="name" label="Название" placeholder="Введите название" />
-            </form>
-        </NCard>
+        <AddTaskForm @close-modal="toggleShowModal" />
     </NModal>
 </template>

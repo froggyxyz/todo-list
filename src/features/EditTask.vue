@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { Edit32Filled } from '@vicons/fluent';
-import { NButton, NModal, NCard } from 'naive-ui';
+import { NButton, NModal } from 'naive-ui';
 import { Icon } from '@vicons/utils';
 import { ref } from 'vue';
-import Input from '@/shared/ui/Input.vue';
+import EditTaskForm from '@/widgets/EditTaskForm.vue';
 
-defineProps<{ id: number }>();
+defineProps<{ id: number; title: string }>();
 
 const showModal = ref<boolean>(false);
 const toggleShowModal = () => (showModal.value = !showModal.value);
@@ -18,10 +18,6 @@ const toggleShowModal = () => (showModal.value = !showModal.value);
         </Icon>
     </NButton>
     <NModal v-model:show="showModal">
-        <NCard :title="`Редактирование задачи #${id}`" style="max-width: 600px">
-            <form>
-                <Input name="name" label="Название" placeholder="Введите название" />
-            </form>
-        </NCard>
+        <EditTaskForm @close-modal="toggleShowModal" :id :title />
     </NModal>
 </template>

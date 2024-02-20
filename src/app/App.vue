@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import '@/shared/lib/validators';
 import { NDialogProvider, NMessageProvider } from 'naive-ui';
 import { RouterView } from 'vue-router';
 </script>

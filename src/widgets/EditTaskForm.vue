@@ -7,6 +7,7 @@ import { toRefs } from 'vue';
 
 const props = defineProps<{ id: number; title: string }>();
 const { title } = toRefs(props);
+const emit = defineEmits<{ closeModal: [] }>();
 
 const { success } = useMessage();
 
@@ -19,7 +20,7 @@ const validationSchema = {
     },
 };
 
-const { handleSubmit, values } = useForm({
+const { handleSubmit } = useForm({
     validationSchema,
     initialValues: {
         title: title.value ?? '',
@@ -28,7 +29,7 @@ const { handleSubmit, values } = useForm({
 
 const onSubmit = handleSubmit(({ title }) => {
     editTask(props.id, { title });
-    toggleShowModal();
+    emit('closeModal');
     success(`Задача #${props.id} успешно отредактирована`);
 });
 </script>
@@ -38,7 +39,7 @@ const onSubmit = handleSubmit(({ title }) => {
         <form @submit.prevent="onSubmit">
             <Input name="title" label="Название" placeholder="Введите название" />
             <div style="display: flex; justify-content: space-between">
-                <NButton @click="toggleShowModal">Отменить</NButton>
+                <NButton @click="emit('closeModal')">Отменить</NButton>
                 <NButton type="success" attr-type="submit">Сохранить</NButton>
             </div>
         </form>

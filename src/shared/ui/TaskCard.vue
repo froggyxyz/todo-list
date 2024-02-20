@@ -22,7 +22,7 @@ const { toggleCompletedTask } = store;
         <template #footer>
             <div class="card__actions">
                 <DeleteTask :id />
-                <EditTask :id />
+                <EditTask :id :title />
             </div>
         </template>
     </NCard>

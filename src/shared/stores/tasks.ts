@@ -35,6 +35,9 @@ export const useTasksStore = defineStore('tasks', {
     },
     getters: {
         getTasks: ({ tasks }): ITask[] => tasks.toReversed(),
+        getNotCompletedTasks(): ITask[] {
+            return this.getTasks.filter((task) => !task.completed);
+        },
         getCompletedTasks(): ITask[] {
             return this.getTasks.filter((task) => task.completed);
         },

@@ -2,6 +2,17 @@
 import TasksList from '@/widgets/TasksList.vue';
 import { NTabs, NTabPane } from 'naive-ui';
 import AddTask from '@/features/AddTask.vue';
+import { useTasksStore } from '@/shared/stores';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+
+const store = useTasksStore();
+const { fetchTasks } = store;
+const { getTasks, getNotCompletedTasks, getCompletedTasks } = storeToRefs(store);
+
+onMounted(() => {
+    if (!getTasks.value.length) fetchTasks();
+});
 </script>
 
 <template>
@@ -10,15 +21,15 @@ import AddTask from '@/features/AddTask.vue';
             <h1>Todo-list</h1>
             <AddTask />
         </div>
-        <NTabs type="segment">
+        <NTabs>
             <NTabPane name="Все">
-                <TasksList />
+                <TasksList :tasks="getTasks" />
             </NTabPane>
             <NTabPane name="Незавершенные">
-                <TasksList completed />
+                <TasksList :tasks="getNotCompletedTasks" />
             </NTabPane>
             <NTabPane name="Завершенные">
-                <TasksList completed />
+                <TasksList :tasks="getCompletedTasks" />
             </NTabPane>
         </NTabs>
     </div>
@@ -30,6 +41,11 @@ import AddTask from '@/features/AddTask.vue';
     margin: 0 auto;
     min-height: 100vh;
     max-width: 40vw;
+
+    @media screen and (max-width: 900px) {
+        max-width: unset;
+        margin: 0 20px;
+    }
 
     &__top {
         display: flex;
